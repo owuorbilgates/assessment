@@ -153,7 +153,7 @@ $$\text{dp}[c][(r + A_i) \bmod M] = \max\left(\text{dp}[c][(r + A_i) \bmod M], \
 
 #### Failure Proof (Violation of Optimal Substructure)
 Bitwise AND is **non-monotonic** with respect to integer ordering:
-$$\text{AND}(S_1) > \text{AND}(S_2) \centernot\implies \text{AND}(S_1 \cup \{x\}) \ge \text{AND}(S_2 \cup \{x\})$$
+`AND(S1) > AND(S2)` does not imply `AND(S1 ∪ {x}) >= AND(S2 ∪ {x})`.
 
 #### Concrete Counterexample
 Let $M = 3$ and $K = 2$. Consider two candidate single elements ($c = 1$):
