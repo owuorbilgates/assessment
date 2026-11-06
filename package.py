@@ -3,6 +3,7 @@ import zipfile
 
 zip_filename = 'modulo_and_subsequence.zip'
 files_to_include = [
+    'README.md',
     'problem.md',
     'solution.md',
     'solution.py',
