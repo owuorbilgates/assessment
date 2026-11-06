@@ -102,13 +102,13 @@ A1 A2 ... AN
   We must select $K = 3$ elements whose sum is divisible by $M = 3$. Valid candidate subsets of size 3 include:
   - Subsequence `[15, 14, 7]`:
     - $\text{Sum} = 15 + 14 + 7 = 36$ ($36 \bmod 3 = 0$) $\implies$ **Valid**.
-    - $\text{AND} = 15 \ \& \ 14 \ \& \ 7 = 1111_2 \ \& \ 1110_2 \ \& \ 0111_2 = 0110_2 = \mathbf{6}$.
+    - `15 & 14 & 7 = 1111_2 & 1110_2 & 0111_2 = 0110_2 = 6`.
   - Subsequence `[14, 12, 7]`:
-    - $\text{Sum} = 33 \equiv 0 \pmod 3$, $\text{AND} = 14 \ \& \ 12 \ \& \ 7 = 4$.
+    - The sum is congruent to 0 modulo 3, and `14 & 12 & 7 = 4`.
   - Subsequence `[15, 11, 7]`:
-    - $\text{Sum} = 33 \equiv 0 \pmod 3$, $\text{AND} = 15 \ \& \ 11 \ \& \ 7 = 3$.
+    - The sum is congruent to 0 modulo 3, and `15 & 11 & 7 = 3`.
   - Subsequence `[11, 12, 7]`:
-    - $\text{Sum} = 30 \equiv 0 \pmod 3$, $\text{AND} = 11 \ \& \ 12 \ \& \ 7 = 0$.
+    - The sum is congruent to 0 modulo 3, and `11 & 12 & 7 = 0`.
 
   The maximum valid bitwise AND is **6**.
 
@@ -125,7 +125,7 @@ A1 A2 ... AN
 - **Detailed Explanation:**
   We need $K = 2$ elements whose sum is even ($M = 2$). Choosing `[12, 14]`:
   - $\text{Sum} = 12 + 14 = 26 \equiv 0 \pmod 2$.
-  - $\text{AND} = 12 \ \& \ 14 = 1100_2 \ \& \ 1110_2 = 1100_2 = \mathbf{12}$.
+  - `12 & 14 = 1100_2 & 1110_2 = 1100_2 = 12`.
 
 #### Example 3: Infeasible Condition
 - **Input:**
@@ -149,7 +149,7 @@ A1 A2 ... AN
 A standard competitive programming heuristic defines:
 $$\text{dp}[c][r] = \text{maximum bitwise AND using } c \text{ elements with } \text{sum} \equiv r \pmod M$$
 with transitions:
-$$\text{dp}[c][(r + A_i) \bmod M] = \max\left(\text{dp}[c][(r + A_i) \bmod M], \ \text{dp}[c-1][r] \ \& \ A_i\right)$$
+`dp[c][(r + A_i) % M] = max(dp[c][(r + A_i) % M], dp[c-1][r] & A_i)`
 
 #### Failure Proof (Violation of Optimal Substructure)
 Bitwise AND is **non-monotonic** with respect to integer ordering:
@@ -163,8 +163,8 @@ Let $M = 3$ and $K = 2$. Consider two candidate single elements ($c = 1$):
 Because both share the same count ($c=1$) and remainder ($r=2$), naive DP keeps Candidate 1 ($8 > 5$) and discards Candidate 2.
 
 Next, consider element $x = 7 = 0111_2$ ($7 \bmod 3 = 1$):
-- Adding $x$ to Candidate 1: $\text{Sum} = 8 + 7 = 15 \equiv 0 \pmod 3$, $\text{AND} = 8 \ \& \ 7 = 1000_2 \ \& \ 0111_2 = \mathbf{0}$.
-- Adding $x$ to Candidate 2: $\text{Sum} = 5 + 7 = 12 \equiv 0 \pmod 3$, $\text{AND} = 5 \ \& \ 7 = 0101_2 \ \& \ 0111_2 = \mathbf{5}$.
+- Adding `x` to Candidate 1 gives a sum divisible by 3, but `8 & 7 = 1000_2 & 0111_2 = 0`.
+- Adding `x` to Candidate 2 also gives a sum divisible by 3, and `5 & 7 = 0101_2 & 0111_2 = 5`.
 
 The optimal choice was Candidate 2, which was discarded early. Consequently, naive DP yields a **Wrong Answer (WA)**.
 
@@ -235,7 +235,7 @@ The correct approach decouples the bitwise objective from the modular constraint
    - Initialize `ans = 0`.
    - Iterate bit $b$ from 29 down to 0:
      1. Form candidate mask: `cand = ans | (1 << b)`.
-     2. Filter array $A$: $F = \{ x \in A \mid (x \ \& \ \text{cand}) == \text{cand} \}$.
+     2. Filter array `A`: `F = {x in A | (x & cand) == cand}`.
      3. If $|F| < K$, bit $b$ cannot be 1. Continue to next bit.
      4. Otherwise, evaluate feasibility with 2D Boolean Subset-Sum DP:
         - `dp[c][r]` is a boolean indicating whether a subset of size $c$ from $F$ has sum modulo $M$ equal to $r$.
